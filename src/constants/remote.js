@@ -1,0 +1,6 @@
+export const SUPABASE_URL = 'https://wyzhvwcucnmeixxhbqxf.supabase.co'
+export const SUPABASE_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5emh2d2N1Y25tZWl4eGhicXhmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTIwNTUsImV4cCI6MjA2ODQ4ODA1NX0.5MiovWAPAnTc0JEFvoWbKIIZy_7kXShJquRLF9jFW_k'
+
+
+
+
