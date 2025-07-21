@@ -7,6 +7,7 @@ import FeedbackPage from "./pages/FeedbackPage";
 import Dashboard from "./pages/Dashboard";
 import { supabase } from "./lib/supabase";
 import AppLayout from "./ui/AppLayout";
+import FeedbackPreviewPage from "./components/FeedbackPreviewPage";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -45,6 +46,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="feedback" element={<FeedbackPage />} />
+          <Route path="preview" element={<FeedbackPreviewPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -18,12 +18,15 @@ export default function AppLayout() {
 
     return (
         <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="p-4 border-b bg-white/60 backdrop-blur-md">
+                <h1 className="text-lg font-semibold">Header</h1>
+            </div>
             <div className="flex-1 p-4">
                 <Outlet />
             </div>
 
             {/* Bottom Navigation */}
-            <nav className="fixed py-4 bottom-4 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-lg px-4 py-2 flex items-center justify-between w-[90%] max-w-md">
+            <nav className="fixed py-4 bottom-4 left-1/2 -translate-x-1/2 bg-white border border-white/30 rounded-full shadow-lg px-4 flex items-center justify-between w-[90%] max-w-md">
                 {navItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     return (
