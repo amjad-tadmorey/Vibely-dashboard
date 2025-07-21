@@ -7,7 +7,7 @@ import FeedbackPage from "./pages/FeedbackPage";
 import Dashboard from "./pages/Dashboard";
 import { supabase } from "./lib/supabase";
 import AppLayout from "./ui/AppLayout";
-import FeedbackPreviewPage from "./components/FeedbackPreviewPage";
+import FeedbackPreviewPage from "./pages/FeedbackPreviewPage";
 
 function App() {
   const [session, setSession] = useState(null);

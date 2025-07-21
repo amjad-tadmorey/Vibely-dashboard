@@ -25,27 +25,35 @@ export default function FeedbackPreviewPage() {
     }, [feedbacks, generated]);
 
     const handleShare = async () => {
-        if (!navigator.canShare || !navigator.canShare({ files: [] })) {
-            return alert("Sharing is not supported on your device");
-        }
-
-        const files = await Promise.all(
-            images.map(async (dataUrl, i) => {
-                const blob = await (await fetch(dataUrl)).blob();
-                return new File([blob], `feedback-${i + 1}.png`, { type: blob.type });
-            })
-        );
-
         try {
-            await navigator.share({
-                title: "Customer Feedback",
-                text: "Check out what our customers said!",
-                files,
-            });
+            const files = await Promise.all(
+                images.map(async (dataUrl, i) => {
+                    const blob = await (await fetch(dataUrl)).blob();
+                    return new File([blob], `feedback-${i + 1}.png`, { type: blob.type });
+                })
+            );
+
+            const canShareFiles = navigator.canShare?.({ files });
+
+            if (navigator.share && canShareFiles) {
+                await navigator.share({
+                    title: "Customer Feedback",
+                    text: "Check out what our customers said!",
+                    files,
+                });
+            } else if (navigator.share) {
+                await navigator.share({
+                    title: "Customer Feedback",
+                    text: "Check out our feedback! " + window.location.href,
+                });
+            } else {
+                alert("Sharing is not supported on this device.");
+            }
         } catch (err) {
             console.error("Share failed", err);
         }
     };
+
 
     return (
         <div className="p-4">

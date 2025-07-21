@@ -20,7 +20,7 @@ export default function FeedbackPage() {
       return new Date(b.created_at) - new Date(a.created_at)
     })
 
-    
+
   return (
     <div className="">
       <FeedbackFilters
