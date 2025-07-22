@@ -22,17 +22,19 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
     });
     const handleDelete = () => {
         setIsDisappearing(true)
-        setTimeout(() => {
-            deleteFeedback({ id });
-        }, 300);
+
     };
 
 
     const handleMarkAsHandled = () => {
-        markAsHandled({
-            match: { id },
-            updates: { status: 'handled' },
-        });
+        setIsDisappearing(true)
+        setTimeout(() => {
+            markAsHandled({
+                match: { id },
+                updates: { status: 'handled' },
+            });
+        }, 300);
+
     };
 
     return (
