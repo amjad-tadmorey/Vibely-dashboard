@@ -2,6 +2,7 @@ import { CalendarDays, MessageSquareText, User } from 'lucide-react'
 import FeedbackCard from './FeedbackCard'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../ui/Button';
 
 export default function FeedbacksList({ feedbacks }) {
     const [selected, setSelected] = useState([]);
@@ -22,18 +23,32 @@ export default function FeedbacksList({ feedbacks }) {
     };
 
     const selectedFeedbacks = feedbacks.filter((f) => selected.includes(f.id));
-    const allSelected = selected.length === feedbacks.length;
+    const allSelected = selected.length === feedbacks.length && feedbacks.length !== 0;
 
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Feedbacks</h2>
-                <button
-                    onClick={handleToggleAll}
-                    className="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md transition"
-                >
-                    {allSelected ? 'Deselect All' : 'Select All'}
-                </button>
+
+                <div className='flex gap-2'>
+                    {selected.length > 0 && (
+                        <Button
+                            onClick={() =>
+                                navigate("/preview", { state: { feedbacks: selectedFeedbacks } })
+                            }
+                            size='sm'
+                        >
+                            Done ({selected.length})
+                        </Button>
+                    )}
+                    <Button
+                        onClick={handleToggleAll}
+                        size='sm'
+                        variant='secondary'
+                    >
+                        {allSelected ? 'Deselect All' : 'Select All'}
+                    </Button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -47,18 +62,6 @@ export default function FeedbacksList({ feedbacks }) {
                 ))}
             </div>
 
-            {selected.length > 0 && (
-                <div className="mt-6 text-center">
-                    <button
-                        onClick={() =>
-                            navigate("/preview", { state: { feedbacks: selectedFeedbacks } })
-                        }
-                        className="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition fixed top-4 right-4"
-                    >
-                        Done ({selected.length})
-                    </button>
-                </div>
-            )}
         </div>
     )
 }
