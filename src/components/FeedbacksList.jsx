@@ -3,6 +3,7 @@ import FeedbackCard from './FeedbackCard'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
+import NoData from '../ui/NoData';
 
 export default function FeedbacksList({ feedbacks }) {
     const [selected, setSelected] = useState([]);
@@ -26,7 +27,7 @@ export default function FeedbacksList({ feedbacks }) {
     const allSelected = selected.length === feedbacks.length && feedbacks.length !== 0;
 
     return (
-        <div>
+        <div className='px-2'>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Feedbacks</h2>
 
@@ -52,14 +53,17 @@ export default function FeedbacksList({ feedbacks }) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {feedbacks.map((fb) => (
-                    <FeedbackCard
-                        key={fb.id}
-                        feedback={fb}
-                        isSelected={selected.includes(fb.id)}
-                        onSelect={handleSelect}
-                    />
-                ))}
+                {feedbacks.length > 0 ?
+                    feedbacks.map((fb) => (
+                        <FeedbackCard
+                            key={fb.id}
+                            feedback={fb}
+                            isSelected={selected.includes(fb.id)}
+                            onSelect={handleSelect}
+                        />
+                    ))
+                    : <NoData message='No feed back for this query'/>
+                }
             </div>
 
         </div>

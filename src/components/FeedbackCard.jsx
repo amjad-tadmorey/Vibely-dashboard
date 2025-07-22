@@ -1,14 +1,36 @@
-import { CalendarDays, MessageSquareText, Star, User } from "lucide-react";
+import { CalendarDays, CheckCircle, MessageSquareText, User } from "lucide-react";
+import { useSwipeable } from "react-swipeable";
+import { motion, useAnimation } from "framer-motion";
+import { useRef } from "react";
 
 const FeedbackCard = ({ feedback, isSelected, onSelect }) => {
     const { rate, content, created_at, customer_name } = feedback;
+    const controls = useAnimation();
+    const cardRef = useRef();
+
+    const handleSwipe = async (direction) => {
+        const x = direction === "left" ? -300 : 300;
+        await controls.start({ x, opacity: 0, transition: { duration: 0.4 } });
+        onSelect(feedback.id);
+        await controls.start({ x: 0, opacity: 1 }); // reset if needed
+    };
+
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => handleSwipe("left"),
+        onSwipedRight: () => handleSwipe("right"),
+        preventScrollOnSwipe: true,
+        trackMouse: true,
+    });
 
     return (
-        <div
-            className={`rounded-2xl mb-1 shadow-md bg-white/30 backdrop-blur-lg border border-white/20 p-4 transition-transform hover:scale-[1.01] duration-2001
-                    ${isSelected ? 'border-blue-500 ring-2 ring-blue-400' : 'hover:ring-1 hover:ring-gray-300'}
-                `}
-            onClick={() => onSelect(feedback.id)}
+        <motion.div
+            {...swipeHandlers}
+            ref={cardRef}
+            animate={controls}
+            initial={{ x: 0, opacity: 1 }}
+            className={`rounded-2xl mb-1 shadow-md bg-white/30 backdrop-blur-lg border border-white/20 p-4 transition-transform
+                ${isSelected ? 'border-blue-500 ring-2 ring-blue-400' : 'hover:ring-1 hover:ring-gray-300'}
+            `}
             id={`feedback-${feedback.id}`}
         >
             {/* Rating Bar */}
@@ -37,7 +59,17 @@ const FeedbackCard = ({ feedback, isSelected, onSelect }) => {
                 <CalendarDays size={14} />
                 {new Date(created_at).toLocaleDateString()}
             </div>
-        </div>
+
+            {/* Optional Action */}
+            {feedback.status === "new" && (
+                <div
+                    className="text-green-600 hover:text-green-800 transition absolute -bottom-6"
+                    title="Mark as Handled"
+                >
+                    <CheckCircle className="w-6 h-6" />
+                </div>
+            )}
+        </motion.div>
     );
 };
 
