@@ -1,5 +1,6 @@
+import { shop_id } from "../constants/local"
 import { supabase } from "./supabase"
-const shop_id = localStorage.getItem('shop_id') || null
+
 
 const applyFilters = (query, filters = []) => {
     filters.forEach(({ column, operator, value }) => {

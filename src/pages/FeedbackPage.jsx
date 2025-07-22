@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGet } from '../hooks/remote/useGet';
 import Spinner from '../ui/Spinner';
 import FeedbacksList from '../components/FeedbacksList';
 import FeedbackFilters from '../components/FeedbackFilters';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFeedbackNotification } from '../hooks/custom/useFeedbackNotification';
 
 export default function FeedbackPage() {
+
+  const { resetCount } = useFeedbackNotification();
+  useEffect(() => {
+    // Reset notification count when page is visited
+    resetCount();
+  }, []);
+
+
+
   const [filterRate, setFilterRate] = useState(0);
   const [sortOrder, setSortOrder] = useState("desc");
   const [activeTab, setActiveTab] = useState("new");
