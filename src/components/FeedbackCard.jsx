@@ -22,7 +22,9 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
     });
     const handleDelete = () => {
         setIsDisappearing(true)
-
+        setTimeout(() => {
+            deleteFeedback({ id });
+        }, 300);
     };
 
 
@@ -34,7 +36,6 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
                 updates: { status: 'handled' },
             });
         }, 300);
-
     };
 
     return (
