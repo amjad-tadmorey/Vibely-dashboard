@@ -27,7 +27,7 @@ export default function FeedbacksList({ feedbacks }) {
     const allSelected = selected.length === feedbacks.length && feedbacks.length !== 0;
 
     return (
-        <div className='px-2'>
+        <div className=''>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Feedbacks</h2>
 
@@ -62,7 +62,7 @@ export default function FeedbacksList({ feedbacks }) {
                             onSelect={handleSelect}
                         />
                     ))
-                    : <NoData message='No feed back for this query'/>
+                    : <NoData message='No feed back for this query' />
                 }
             </div>
 

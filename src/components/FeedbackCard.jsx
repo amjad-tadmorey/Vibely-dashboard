@@ -1,75 +1,72 @@
-import { CalendarDays, CheckCircle, MessageSquareText, User } from "lucide-react";
+import { CalendarDays, CheckCircle, MessageSquareText, Star, User, Trash2, Pin } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
-import { motion, useAnimation } from "framer-motion";
-import { useRef } from "react";
+import { useState } from "react";
 
-const FeedbackCard = ({ feedback, isSelected, onSelect }) => {
+const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
     const { rate, content, created_at, customer_name } = feedback;
-    const controls = useAnimation();
-    const cardRef = useRef();
-
-    const handleSwipe = async (direction) => {
-        const x = direction === "left" ? -300 : 300;
-        await controls.start({ x, opacity: 0, transition: { duration: 0.4 } });
-        onSelect(feedback.id);
-        await controls.start({ x: 0, opacity: 1 }); // reset if needed
-    };
+    const [isSwiped, setIsSwiped] = useState(false);
 
     const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => handleSwipe("left"),
-        onSwipedRight: () => handleSwipe("right"),
+        onSwipedLeft: () => setIsSwiped(true),
+        onSwipedRight: () => setIsSwiped(false),
         preventScrollOnSwipe: true,
-        trackMouse: true,
+        trackTouch: true,
+        trackMouse: false,
     });
 
     return (
-        <motion.div
-            {...swipeHandlers}
-            ref={cardRef}
-            animate={controls}
-            initial={{ x: 0, opacity: 1 }}
-            className={`rounded-2xl mb-1 shadow-md bg-white/30 backdrop-blur-lg border border-white/20 p-4 transition-transform
-                ${isSelected ? 'border-blue-500 ring-2 ring-blue-400' : 'hover:ring-1 hover:ring-gray-300'}
-            `}
-            id={`feedback-${feedback.id}`}
-        >
-            {/* Rating Bar */}
-            <div className="flex items-center justify-between mb-2">
-                <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                        <span key={i} className={i <= rate ? "text-yellow-400" : "text-gray-300"}>
-                            ★
-                        </span>
-                    ))}
-                </div>
-                <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <User size={14} />
-                    {customer_name}
-                </div>
+        <div className="relative w-full overflow-hidden" {...swipeHandlers}>
+            {/* Action Buttons */}
+            <div
+                className={`absolute right-0 top-0 h-full flex gap-2 px-3 items-center transition-all duration-300 ease-in-out z-0
+    ${isSwiped ? 'translate-x-0 opacity-100 pop-animation' : 'translate-x-full opacity-0'}
+  `}
+            >
+                <button className="text-red-600 hover:text-red-800 transition" title="Delete">
+                    <Trash2 />
+                </button>
+                <button className="text-blue-600 hover:text-blue-800 transition" title="Pin">
+                    <Pin />
+                </button>
             </div>
 
-            {/* Content */}
-            <div className="text-gray-800 text-sm font-medium mb-3">
-                <MessageSquareText size={16} className="inline mr-1 text-gray-500" />
-                {content}
-            </div>
-
-            {/* Date */}
-            <div className="text-xs text-gray-500 flex items-center gap-1">
-                <CalendarDays size={14} />
-                {new Date(created_at).toLocaleDateString()}
-            </div>
-
-            {/* Optional Action */}
-            {feedback.status === "new" && (
-                <div
-                    className="text-green-600 hover:text-green-800 transition absolute -bottom-6"
-                    title="Mark as Handled"
-                >
-                    <CheckCircle className="w-6 h-6" />
+            {/* Main Card */}
+            <div
+                className={`m-1 rounded-2xl mb-2 shadow-md bg-white/30 backdrop-blur-lg border border-white/20 p-4 transition-all duration-300 ease-in-out
+                    ${isSelected ? 'border-blue-500 ring-2 ring-blue-400' : 'hover:ring-1 hover:ring-gray-300'}
+                    ${isSwiped ? '-translate-x-24' : 'translate-x-0'}
+                    relative z-10
+                `}
+                onClick={() => onSelect(feedback.id)}
+            >
+                {/* Rating */}
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                            <span key={i} className={i <= rate ? "text-yellow-400" : "text-gray-300"}>
+                                ★
+                            </span>
+                        ))}
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <User size={14} />
+                        {customer_name}
+                    </div>
                 </div>
-            )}
-        </motion.div>
+
+                {/* Content */}
+                <div className="text-gray-800 text-sm font-medium mb-3">
+                    <MessageSquareText size={16} className="inline mr-1 text-gray-500" />
+                    {content}
+                </div>
+
+                {/* Date */}
+                <div className="text-xs text-gray-500 flex items-center gap-1">
+                    <CalendarDays size={14} />
+                    {new Date(created_at).toLocaleDateString()}
+                </div>
+            </div>
+        </div>
     );
 };
 
