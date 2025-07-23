@@ -9,12 +9,10 @@ import { useFeedbackNotification } from '../hooks/custom/useFeedbackNotification
 export default function FeedbackPage() {
 
   const { resetCount } = useFeedbackNotification();
+
   useEffect(() => {
-    // Reset notification count when page is visited
     resetCount();
   }, []);
-
-
 
   const [filterRate, setFilterRate] = useState(0);
   const [sortOrder, setSortOrder] = useState("desc");

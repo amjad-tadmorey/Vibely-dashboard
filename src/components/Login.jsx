@@ -2,6 +2,7 @@ import { useState } from "react"
 import { login } from "../lib/supaAuth"
 import { toast } from "react-toast"
 import { useShop } from "../context/ShopContext"
+import { Link } from "react-router-dom"
 
 export default function Login() {
     const { setShop } = useShop()
@@ -61,6 +62,7 @@ export default function Login() {
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
+                <Link to={'/forgot-password'}><p className="text-white underline mt-2 ml-2">Forgot Password ?</p></Link>
             </div>
         </div>
     )

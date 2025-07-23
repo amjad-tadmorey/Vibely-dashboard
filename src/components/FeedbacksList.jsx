@@ -1,13 +1,18 @@
-import { CalendarDays, MessageSquareText, User } from 'lucide-react'
+import { Archive, CalendarDays, MessageSquareText, RotateCw, Sparkles, Trash2, User } from 'lucide-react'
 import FeedbackCard from './FeedbackCard'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import NoData from '../ui/NoData';
+import { useDelete } from '../hooks/remote/useDelete';
+import { useUpdate } from '../hooks/remote/useUpdate';
 
 export default function FeedbacksList({ feedbacks }) {
     const [selected, setSelected] = useState([]);
     const navigate = useNavigate();
+
+    const { mutate: deleteFeedback } = useDelete('feedbacks', 'feedbacks');
+    const { mutate: markAsHandled } = useUpdate('feedbacks', 'feedbacks');
 
     const handleSelect = (id) => {
         setSelected((prev) =>
@@ -26,23 +31,58 @@ export default function FeedbacksList({ feedbacks }) {
     const selectedFeedbacks = feedbacks.filter((f) => selected.includes(f.id));
     const allSelected = selected.length === feedbacks.length && feedbacks.length !== 0;
 
+    const handleDeleteNewFeedbacks = () => {
+        selectedFeedbacks.map((fb) => {
+            deleteFeedback({ id: fb.id });
+        })
+        setSelected([])
+    };
+
+    const handleMarkMultipleAsHandled = (ids) => {
+        selectedFeedbacks.map((fb) => {
+            markAsHandled({
+                match: { id: fb.id },
+                updates: { status: 'handled' },
+            });
+        })
+        setSelected([])
+    };
+
     return (
         <div className=''>
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Feedbacks</h2>
+                {/* <h2 className="text-xl font-semibold">Feedbacks</h2> */}
 
-                <div className='flex gap-2'>
+                <div className='flex gap-4 ml-auto items-center'>
                     {selected.length > 0 && (
-                        <Button
-                            onClick={() =>
-                                navigate("/preview", { state: { feedbacks: selectedFeedbacks } })
-                            }
-                            size='sm'
-                        >
-                            Done ({selected.length})
-                        </Button>
+                        <>
+                            <h1 className='font-semibold text-xl'>({selected.length})</h1>
+                            <Button
+                                onClick={() =>
+                                    navigate("/preview", { state: { feedbacks: selectedFeedbacks } })
+                                }
+                                size='sm'
+                                variant='success'
+                            >
+                                <Sparkles />
+                            </Button>
+                            <Button
+                                onClick={handleDeleteNewFeedbacks}
+                                size='sm'
+                                variant='danger'
+                            >
+                                <Trash2 />
+                            </Button>
+                            <Button
+                                onClick={handleMarkMultipleAsHandled}
+                                size='sm'
+                            >
+                                <Archive />
+                            </Button>
+                        </>
                     )}
                     <Button
+                        className='ml-auto'
                         onClick={handleToggleAll}
                         size='sm'
                         variant='secondary'

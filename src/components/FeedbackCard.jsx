@@ -38,6 +38,7 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
         }, 300);
     };
 
+
     return (
         <AnimatePresence>
             <motion.div

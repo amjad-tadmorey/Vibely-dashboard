@@ -6,6 +6,7 @@ export default function Card({ title, icon, value, color }) {
         blue: 'from-blue-300 to-blue-500',
         red: 'from-red-300 to-red-500',
         green: 'from-green-300 to-green-500',
+        yellow: 'from-yellow-300 to-yellow-500',
     }
 
     const gradient = gradients[color] || gradients.blue

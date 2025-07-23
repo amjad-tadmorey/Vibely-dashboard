@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import { supabase } from "./lib/supabase";
 import AppLayout from "./ui/AppLayout";
 import FeedbackPreviewPage from "./pages/FeedbackPreviewPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -38,6 +40,14 @@ function App() {
         <Route
           path="/login"
           element={!session ? <Login /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
         />
 
         <Route

@@ -20,7 +20,6 @@ export default function ThumbNav() {
         { name: "Home", path: "/", icon: <Home size={22} /> },
         { name: "Feedback", path: "/feedback", icon: <MessageCircle size={22} /> },
     ];
-    console.log(newCount);
 
     return (
         <nav className="fixed z-50 py-4 bottom-4 left-1/2 -translate-x-1/2 bg-white border border-white/30 rounded-full shadow-lg px-4 flex items-center justify-between w-[90%] max-w-md">
