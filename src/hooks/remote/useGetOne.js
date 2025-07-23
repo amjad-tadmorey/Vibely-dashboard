@@ -5,10 +5,9 @@ export function useGetOne(table, queryKey, filters) {
     return useQuery({
         queryKey: [queryKey, filters],
         queryFn: () =>
-            supaQuery({
-                table,
+            supaQuery(table, {
                 filters,
                 single: true,
             }),
-    })
+    });
 }

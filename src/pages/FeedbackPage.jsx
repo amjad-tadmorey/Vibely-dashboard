@@ -32,7 +32,7 @@ export default function FeedbackPage() {
     });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 relative">
       {/* Tabs */}
       <div className="flex justify-center mb-4">
         {["new", "handled"].map(tab => (

@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { login } from "../lib/supaAuth"
 import { toast } from "react-toast"
+import { useShop } from "../context/ShopContext"
 
 export default function Login() {
+    const { setShop } = useShop()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
@@ -13,12 +15,13 @@ export default function Login() {
         setLoading(true)
         setError("")
 
-        const { error } = await login(email, password)
+        const { data, error } = await login(email, password)
 
         if (error) {
             setError(error.message)
         } else {
             toast.success("Login successful!")
+            setShop(data)
         }
 
         setLoading(false)
