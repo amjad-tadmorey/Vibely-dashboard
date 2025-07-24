@@ -6,7 +6,7 @@ import { useState } from "react"
 import Button from "../ui/Button"
 import Input from '../ui/Input'
 import { platforms } from "../constants/local"
-import SocialCard from "../ui/socialCard"
+import CardSocial from "../ui/CardSocial"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
@@ -101,7 +101,7 @@ export default function Settings() {
                         <h1 className="block font-medium text-sm text-gray-700">Links</h1>
 
                         <div className="space-y-2">
-                            {social.map(({ name, link }) => <SocialCard key={name} name={name} link={link} social={social} updateShop={updateShop} shop={shop} />)}
+                            {social.map(({ name, link }) => <CardSocial key={name} name={name} link={link} social={social} updateShop={updateShop} shop={shop} />)}
                         </div>
 
                         <div className="mt-4">

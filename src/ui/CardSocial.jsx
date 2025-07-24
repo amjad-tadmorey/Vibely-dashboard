@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
-export default function SocialCard({ name, link, social, updateShop, shop }) {
+export default function CardSocial({ name, link, social, updateShop, shop }) {
     const [isDisappearing, setIsDisappearing] = useState(false)
 
     const handleDelete = (platformName) => {
