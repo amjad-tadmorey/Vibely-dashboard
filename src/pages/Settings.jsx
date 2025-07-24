@@ -7,6 +7,7 @@ import Button from "../ui/Button"
 import Input from '../ui/Input'
 import { platforms } from "../constants/local"
 import CardSocial from "../ui/CardSocial"
+import toast from "react-hot-toast"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
@@ -20,16 +21,16 @@ export default function Settings() {
     const [fontName, setFontName] = useState(shop?.shop_name || '')
     const [platformName, setPlatformName] = useState('')
     const [link, setLink] = useState('')
-    const [colorHex, setColorHex] = useState('#ffffff');
+    const [colorHex, setColorHex] = useState();
 
 
     if (isLoadingShop) return null // must view a special ui if the shop_id not found
 
     const { color, font, social, logo, shop_name } = shop
 
-
-
     const handleSave = (field, value) => {
+        if (!value) return toast.error('Missing value')
+
         updateShop({
             match: { id: localStorage.getItem("shop_id") },
             updates: { ...shop, [field]: value }, // ⬅️ keeps other values unchanged
@@ -37,13 +38,13 @@ export default function Settings() {
     }
 
     const handleAddSocial = (value) => {
+        if (value.name === '' || value.link === '') return toast.error('Missing name or link')
+
         updateShop({
             match: { id: localStorage.getItem("shop_id") },
             updates: { ...shop, social: [...social, value] }, // ⬅️ keeps other values unchanged
         })
     }
-
-    console.log(colorHex);
 
 
     return (
