@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+  const x = 1
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
