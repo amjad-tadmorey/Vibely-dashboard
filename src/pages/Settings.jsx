@@ -5,8 +5,8 @@ import { useGetOne } from '../hooks/remote/useGetOne'
 import { useState } from "react"
 import Button from "../ui/Button"
 import Input from '../ui/Input'
-import SocialCard from "../ui/socialCard"
 import { platforms } from "../constants/local"
+import SocialCard from "../ui/socialCard"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
