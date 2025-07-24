@@ -1,34 +1,18 @@
-import { useState, useEffect } from 'react';
-import Button from '../ui/Button';
-import Table from '../ui/Table';
 import FeedbackCard from '../components/FeedbackCard';
 import { useGet } from '../hooks/remote/useGet';
 import Spinner from '../ui/Spinner';
 import Card from '../ui/Card';
 import { ClipboardList, Star, TriangleAlert } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import CreateUser from '../temp/CreateUser';
+import { useSwipeNavigate } from '../hooks/custom/useSwipeNavigate';
 
-const feedbacks = [
-  { id: 1, rating: 5, comment: 'Great service!', created_at: '2025-07-21', status: 'new', customer: 'Ali' },
-  { id: 2, rating: 4, comment: 'Good quality.', created_at: '2025-07-20', status: 'new', customer: 'Lina' },
-  { id: 3, rating: 1, comment: 'Bad experience', created_at: '2025-07-19', status: 'new', customer: 'Sara' },
-  { id: 4, rating: 5, comment: 'Loved it!', created_at: '2025-07-18', status: 'pinned', customer: 'Omar' },
-];
-
-const columns = [
-  { header: 'Customer', accessor: 'customer' },
-  { header: 'Rating', accessor: 'rating' },
-  { header: 'Comment', accessor: 'comment' },
-]
-
-const data = [
-  { customer: 'Ali', rating: 4, comment: 'Great service!' },
-  { customer: 'Sara', rating: 5, comment: 'Loved it!' },
-  { customer: 'John', rating: 2, comment: 'Not satisfied' },
-]
 
 export default function Dashboard() {
+  const handlers = useSwipeNavigate({
+    left: '/feedback'
+  })
+
+
   const { data: feedbacks, isPending } = useGet('feedbacks', 'feedbacks')
 
   if (isPending) return <Spinner />
@@ -49,7 +33,7 @@ export default function Dashboard() {
         transition={{ duration: 0.15 }}
         className="w-full"
       >
-        <div className="relative z-10 space-y-8 max-w-2xl mx-auto">
+        <div {...handlers} className="relative z-10 space-y-8 max-w-2xl mx-auto">
           <div className="space-y-8">
             {/* Top Stats */}
             <Card title={'Total Feedbacks'} value={totalFeedbacks} icon={<ClipboardList color='blue' />} color='blue' />

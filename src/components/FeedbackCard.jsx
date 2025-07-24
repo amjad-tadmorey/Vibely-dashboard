@@ -49,7 +49,7 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
                 animate={isDisappearing ? { opacity: 0, scale: 0.95 } : {}}
                 transition={{ duration: 0.3 }}
             >
-                <div className="relative w-full overflow-hidden" {...swipeHandlers}>
+                <div className="card relative w-full overflow-hidden" {...swipeHandlers}>
                     {/* Action Buttons */}
                     <div
                         className={`absolute right-0 top-0 h-full flex gap-2 px-3 items-center transition-all duration-300 ease-in-out z-0

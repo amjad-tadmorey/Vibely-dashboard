@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { Home, LogOut, MessageCircle } from "lucide-react";
+import { Home, LogOut, MessageCircle, Settings } from "lucide-react";
 import { useFeedbackNotification } from "../hooks/custom/useFeedbackNotification";
 
 
@@ -19,6 +19,7 @@ export default function ThumbNav() {
     const navItems = [
         { name: "Home", path: "/", icon: <Home size={22} /> },
         { name: "Feedback", path: "/feedback", icon: <MessageCircle size={22} /> },
+        { name: "Settings", path: "/settings", icon: <Settings size={22} /> },
     ];
 
     return (
@@ -29,7 +30,7 @@ export default function ThumbNav() {
                     <Link
                         key={item.name}
                         to={item.path}
-                        className={`flex flex-col items-center text-xs ${isActive ? "text-blue-500" : "text-gray-700 relative"
+                        className={`flex flex-col items-center text-xs ${isActive ? "text-[#178AE4]" : "text-gray-700 relative"
                             }`}
                     >
                         {item.icon}

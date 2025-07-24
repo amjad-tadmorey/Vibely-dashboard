@@ -10,6 +10,8 @@ import AppLayout from "./ui/AppLayout";
 import FeedbackPreviewPage from "./pages/FeedbackPreviewPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Settings from "./pages/Settings";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -35,31 +37,59 @@ function App() {
   if (loading) return <Spinner />;
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/login"
-          element={!session ? <Login /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/forgot-password"
-          element={<ForgotPassword />}
-        />
-        <Route
-          path="/reset-password"
-          element={<ResetPassword />}
-        />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={!session ? <Login /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+          <Route
+            path="/reset-password"
+            element={<ResetPassword />}
+          />
 
-        <Route
-          path="/"
-          element={session ? <AppLayout /> : <Navigate to="/login" replace />}
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="feedback" element={<FeedbackPage />} />
-          <Route path="preview" element={<FeedbackPreviewPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/"
+            element={session ? <AppLayout /> : <Navigate to="/login" replace />}
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="feedback" element={<FeedbackPage />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="preview" element={<FeedbackPreviewPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+
+      <Toaster
+        gutter={12}
+        containerStyle={{
+          width: '100%',
+          top: '35%',
+          left: '50%',
+          translate: '-50% -50%'
+        }}
+        toastOptions={{
+          success: {
+            duration: 3000
+          },
+          error: {
+            duration: 5000
+          },
+          style: {
+            fontSize: '1rem',
+            width: 'fit-content',
+            padding: '8px 24px',
+            backgroundColor: 'white',
+            color: 'var(--color-grey-700)'
+          }
+        }}
+      />
+    </>
   );
 }
 

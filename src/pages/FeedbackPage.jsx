@@ -5,8 +5,13 @@ import FeedbacksList from '../components/FeedbacksList';
 import FeedbackFilters from '../components/FeedbackFilters';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFeedbackNotification } from '../hooks/custom/useFeedbackNotification';
+import { useSwipeNavigate } from '../hooks/custom/useSwipeNavigate';
 
 export default function FeedbackPage() {
+  const handlers = useSwipeNavigate(
+    { right: '/', left: '/settings' },
+    'card'
+  )
 
   const { resetCount } = useFeedbackNotification();
 
@@ -30,7 +35,7 @@ export default function FeedbackPage() {
     });
 
   return (
-    <div className="space-y-4 relative">
+    <div {...handlers} className="space-y-4 relative">
       {/* Tabs */}
       <div className="flex justify-center mb-4">
         {["new", "handled"].map(tab => (

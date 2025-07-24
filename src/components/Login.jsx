@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { login } from "../lib/supaAuth"
-import { toast } from "react-toast"
 import { useShop } from "../context/ShopContext"
 import { Link } from "react-router-dom"
 
@@ -21,7 +20,6 @@ export default function Login() {
         if (error) {
             setError(error.message)
         } else {
-            toast.success("Login successful!")
             setShop(data)
         }
 
