@@ -12,7 +12,7 @@ function CreateUser() {
         setLoading(true);
         setMessage(null);
 
-        const { data, error } = await signUpWithEmail(email, password, 'admin', 2);
+        const { data, error } = await signUpWithEmail(email, password, 'admin', 1);
 
         if (error) {
             setMessage(`❌ ${error.message}`);

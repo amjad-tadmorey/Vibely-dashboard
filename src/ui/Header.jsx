@@ -2,7 +2,7 @@ import { shop_id } from '../constants/local'
 import { useGetOne } from '../hooks/remote/useGetOne'
 export default function Header() {
     const { data: shop, isPending } = useGetOne('shops', 'shops',
-        [{ column: 'id', operator: 'eq', value: shop_id }] // filters
+        [{ column: 'id', operator: 'eq', value: shop_id }]
     )
 
     if (isPending) return null
