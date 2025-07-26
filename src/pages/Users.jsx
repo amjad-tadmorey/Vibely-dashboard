@@ -3,9 +3,14 @@ import { useGet } from "../hooks/remote/useGet";
 import { shop_id } from "../constants/local";
 import Spinner from "../ui/Spinner";
 import { ShieldCheck, User } from "lucide-react";
+import { useSwipeNavigate } from "../hooks/custom/useSwipeNavigate";
 
 
 export default function Users() {
+    const handlers = useSwipeNavigate({
+        right: '/settings'
+    })
+
     const { data: users, isPending } = useGet('profiles', {
         filters: [{ column: 'shop_id', operator: 'eq', value: shop_id }],
     })
@@ -21,7 +26,7 @@ export default function Users() {
                 transition={{ duration: 0.15 }}
                 className="w-full"
             >
-                <div className="p-4">
+                <div {...handlers} className="p-4">
                     <h2 className="text-xl font-bold mb-4">Users in this Shop</h2>
                     <ul className="space-y-2">
                         {users.map((user) => (

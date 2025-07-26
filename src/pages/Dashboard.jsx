@@ -6,13 +6,10 @@ import { ClipboardList, Star, TriangleAlert } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSwipeNavigate } from '../hooks/custom/useSwipeNavigate';
 
-
 export default function Dashboard() {
   const handlers = useSwipeNavigate({
     left: '/feedback'
   })
-
-
   const { data: feedbacks, isPending } = useGet('feedbacks', 'feedbacks')
 
   if (isPending) return <Spinner />

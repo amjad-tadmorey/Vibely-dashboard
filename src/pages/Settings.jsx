@@ -2,8 +2,6 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useSwipeNavigate } from "../hooks/custom/useSwipeNavigate"
 import { useUpdate } from "../hooks/remote/useUpdate"
 import { useGetOne } from '../hooks/remote/useGetOne'
-import { useState } from "react"
-import { useUpload } from "../hooks/remote/useUpload"
 import SettingsBasics from "../components/SettingsBasics"
 import SettingsLinks from "../components/SettingsLinks"
 import SettingsColor from "../components/SettingsColor"
@@ -12,6 +10,7 @@ import SettingsLogo from "../components/SettingsLogo"
 export default function Settings() {
     const handlers = useSwipeNavigate({
         right: '/feedback',
+        left: '/users',
     })
 
     const { data: shop, isPending } = useGetOne('shops', 'shops')
