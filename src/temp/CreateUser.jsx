@@ -1,65 +1,92 @@
 import { useState } from "react";
-import { signUpWithEmail } from "../lib/supaAuth";
+import { supabase } from "../lib/supabase";
+import Input from '../ui/Input'
+import Button from '../ui/Button'
+import { AnimatePresence, motion } from "framer-motion";
+import { shop_id } from "../constants/local";
+import toast from "react-hot-toast";
 
-function CreateUser() {
+
+export default function CreateUser() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const handleSignup = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setMessage(null);
 
-        const { data, error } = await signUpWithEmail(email, password, 'admin', 1);
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    role: "user",
+                    shop_id: shop_id,  // make sure this is defined
+                },
+            },
+        });
 
-        if (error) {
-            setMessage(`❌ ${error.message}`);
+
+        if (signUpError) {
+            setMessage(`Error creating user: ${signUpError.message}`);
+            setLoading(false);
+            return;
+        }
+
+        const newUser = signUpData.user;
+        if (!newUser) {
+            setLoading(false);
+            return;
+        }
+
+        const { error: updateError } = await supabase
+            .from("profiles")
+            .update({
+                email,
+                shop_id,
+                role: "user",
+            })
+            .eq("id", newUser.id);
+
+        if (updateError) {
+            toast.error(`Error updating profile: ${updateError.message}`);
         } else {
-            setMessage("✅ Signup successful! Please check your email to confirm.");
+            toast.success("User created");
         }
 
         setLoading(false);
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 bg-white shadow rounded mt-10">
-            <h2 className="text-xl font-bold mb-4 text-center">Sign Up</h2>
-            <form onSubmit={handleSignup} className="space-y-4">
-                <div>
-                    <label className="block mb-1 font-medium">Email</label>
-                    <input
+        <AnimatePresence mode="wait">
+            <motion.div
+                initial={{ x: 100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="w-full"
+            >
+                <form onSubmit={handleSubmit} className="space-y-4 max-w-md p-4">
+                    <Input
                         type="email"
-                        className="w-full border px-3 py-2 rounded"
+                        placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                </div>
-                <div>
-                    <label className="block mb-1 font-medium">Password</label>
-                    <input
+                    <Input
                         type="password"
-                        className="w-full border px-3 py-2 rounded"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </div>
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-                >
-                    {loading ? "Signing up..." : "Sign Up"}
-                </button>
-            </form>
-            {message && (
-                <div className="mt-4 text-center text-sm text-gray-700">{message}</div>
-            )}
-        </div>
-    )
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Creating..." : "Create User"}
+                    </Button>
+                </form>
+            </motion.div>
+        </AnimatePresence>
+    );
 }
-
-export default CreateUser

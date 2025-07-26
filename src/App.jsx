@@ -12,9 +12,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
+import Users from "./pages/Users";
+import { useAuth } from "./context/AuthContext";
+import AccessDenied from "./pages/AccessDenied";
 
 function App() {
-  const x = 1
+  const { user } = useAuth()
+  const role = user?.user_metadata?.role
+
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,7 +65,8 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="feedback" element={<FeedbackPage />} />
-            <Route path="settings" element={<Settings />} />
+            <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
+            <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
             <Route path="preview" element={<FeedbackPreviewPage />} />
           </Route>
         </Routes>

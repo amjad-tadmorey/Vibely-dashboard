@@ -43,25 +43,3 @@ export async function handlePasswordReset(newPassword) {
     return { data };
 }
 
-
-
-export async function signUpWithEmail(email, password, role, shop_id) {
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            data: {
-                role,     // Add custom metadata here
-                shop_id,         // Example: assign shop_id
-            }
-        }
-    })
-
-    if (error) {
-        console.error('Signup error:', error.message)
-        return { error }
-    }
-
-    console.log('User signed up:', data)
-    return { data }
-}

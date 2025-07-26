@@ -3,8 +3,12 @@ import ThumbNav from "./ThumbNav";
 import Header from "./Header";
 import { shop_id } from "../constants/local";
 import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function AppLayout() {
+  const { user } = useAuth();
+  const role = user.user_metadata.role
+
 
   useEffect(() => {
     if (shop_id === null) window.location.reload()
