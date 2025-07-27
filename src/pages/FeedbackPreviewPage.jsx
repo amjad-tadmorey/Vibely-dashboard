@@ -95,7 +95,7 @@ export default function FeedbackPreviewPage() {
             {generated && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {images.map((src, i) => (
-                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="rounded-xl bg-white" />
+                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="bg-white" />
                     ))}
                 </div>
             )}
