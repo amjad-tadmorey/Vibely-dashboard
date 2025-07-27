@@ -15,6 +15,8 @@ import { Toaster } from "react-hot-toast";
 import Users from "./pages/Users";
 import { useAuth } from "./context/AuthContext";
 import AccessDenied from "./pages/AccessDenied";
+import { shop_id } from "./constants/local";
+import { useGet } from "./hooks/remote/useGet";
 
 function App() {
   const { user } = useAuth()
@@ -22,6 +24,10 @@ function App() {
 
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { data: shop, isPending } = useGet('shops', {
+    filters: [{ column: 'id', operator: 'eq', value: shop_id }],
+  })
 
   useEffect(() => {
     const getSession = async () => {
@@ -40,7 +46,9 @@ function App() {
     return () => listener?.subscription.unsubscribe();
   }, []);
 
-  if (loading) return <Spinner />;
+  if (loading || isPending) return <Spinner />;
+
+  const color = shop[0].color
 
   return (
     <>
@@ -67,7 +75,7 @@ function App() {
             <Route path="feedback" element={<FeedbackPage />} />
             <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
             <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
-            <Route path="preview" element={<FeedbackPreviewPage />} />
+            <Route path="preview" element={<FeedbackPreviewPage color={color} />} />
           </Route>
         </Routes>
       </BrowserRouter>

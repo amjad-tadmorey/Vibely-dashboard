@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { toJpeg, toPng } from "html-to-image";
-import FeedbackCard from "../components/FeedbackCard";
+import { toPng } from "html-to-image";
 import Button from "../ui/Button";
 import CubesSpinner from '../ui/CubeSpinner'
 import { CalendarDays, MessageSquareText, Share, User } from "lucide-react";
+import { getGradientFromColor } from "../lib/getGradientFromColor";
+import { useGet } from '../hooks/remote/useGet'
 
-export default function FeedbackPreviewPage() {
+export default function FeedbackPreviewPage({ color }) {
+
+
     const { state } = useLocation();
     const feedbacks = state?.feedbacks || [];
     const containerRef = useRef(null);
@@ -59,6 +62,8 @@ export default function FeedbackPreviewPage() {
         }
     };
 
+    // if (isPending) return null
+    const gradientClass = getGradientFromColor(color);
 
     return (
         <div className="">
@@ -93,8 +98,9 @@ export default function FeedbackPreviewPage() {
                         return <div
                             key={fb.id}
                             className={
-                                `m-1 mb-2 shadow-md bg-white/30 backdrop-blur-lg border border-white/20 p-4 transition-all duration-300 ease-in-out relative z-10`
+                                ` m-1 mb-2 shadow-md p-4 transition-all duration-300 ease-in-out relative z-10`
                             }
+                            style={gradientClass}
 
                         >
                             {/* Rating */}
