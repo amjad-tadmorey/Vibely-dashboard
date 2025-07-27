@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { toPng } from "html-to-image";
+import { toJpeg, toPng } from "html-to-image";
 import FeedbackCard from "../components/FeedbackCard";
 import Button from "../ui/Button";
 import CubesSpinner from '../ui/CubeSpinner'
@@ -16,7 +16,9 @@ export default function FeedbackPreviewPage() {
     useEffect(() => {
         async function generatePNGs() {
             const nodes = Array.from(containerRef.current.children);
-            const imagePromises = nodes.map((node) => toPng(node, { pixelRatio: 5 }));
+            const imagePromises = nodes.map((node) =>
+                toPng(node, { backgroundColor: "white", quality: 1 })
+            );
             const dataUrls = await Promise.all(imagePromises);
             setImages(dataUrls);
             setGenerated(true);
@@ -93,7 +95,7 @@ export default function FeedbackPreviewPage() {
             {generated && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {images.map((src, i) => (
-                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="rounded-xl shadow bg-white" />
+                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="rounded-xl bg-white" />
                     ))}
                 </div>
             )}
