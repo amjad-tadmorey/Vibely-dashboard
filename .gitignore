@@ -1,0 +1,60 @@
+# Node
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependency directories
+.pnp/
+.pnp.js
+
+# IDEs & editors
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Coverage
+coverage/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Next.js
+.next/
+
+# Vite
+.vite/
+*.log
+
+# React Native / Expo (if applicable)
+.expo/
+.expo-shared/
+
+# Build output
+out/
+
+# Optional: local dev data
+*.local
+
+# Optional: macOS file system clutter
+.AppleDouble
+.LSOverride
+
+# Optional: Windows clutter
+ehthumbs.db
+Desktop.ini

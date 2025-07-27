@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+//192.168.1.1
 import Login from "./components/Login";
 import Spinner from "./ui/Spinner"
 import FeedbackPage from "./pages/FeedbackPage";
