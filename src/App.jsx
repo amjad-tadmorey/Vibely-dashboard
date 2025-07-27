@@ -18,6 +18,7 @@ import AccessDenied from "./pages/AccessDenied";
 import { shop_id } from "./constants/local";
 import { useGet } from "./hooks/remote/useGet";
 import QR from "./pages/QR";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   const { user } = useAuth()
@@ -54,33 +55,35 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={!session ? <Login /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          />
-          <Route
-            path="/reset-password"
-            element={<ResetPassword />}
-          />
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path="/login"
+              element={!session ? <Login /> : <Navigate to="/" replace />}
+            />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword />}
+            />
+            <Route
+              path="/reset-password"
+              element={<ResetPassword />}
+            />
 
-          <Route
-            path="/"
-            element={session ? <AppLayout /> : <Navigate to="/login" replace />}
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="feedback" element={<FeedbackPage />} />
-            <Route path="qr" element={<QR />} />
-            <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
-            <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
-            <Route path="preview" element={<FeedbackPreviewPage color={color} />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            <Route
+              path="/"
+              element={session ? <AppLayout /> : <Navigate to="/login" replace />}
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="feedback" element={<FeedbackPage />} />
+              <Route path="qr" element={<QR />} />
+              <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
+              <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
+              <Route path="preview" element={<FeedbackPreviewPage color={color} />} />
+            </Route>
+          </Routes>
+          </ErrorBoundary>
+        </BrowserRouter>
 
       <Toaster
         gutter={12}

@@ -5,13 +5,15 @@ import Card from '../ui/Card';
 import { ClipboardList, Star, TriangleAlert } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSwipeNavigate } from '../hooks/custom/useSwipeNavigate';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function Dashboard() {
   const handlers = useSwipeNavigate({
     left: '/feedback'
-  })
-  const { data: feedbacks, isPending } = useGet('feedbacks', 'feedbacks')
+  }, 'card')
+  const { data: feedbacks, isPending, error } = useGet('feedbacks', 'feedbacks')
 
+    if(error) return <ErrorMessage />
   if (isPending) return <Spinner />
 
   const totalFeedbacks = feedbacks.length
@@ -43,28 +45,6 @@ export default function Dashboard() {
                 {alerts.map((fb) => <FeedbackCard key={fb.id} feedback={fb} />)}
               </div>
             )}
-
-            {/* Recent Feedbacks */}
-            {/* <div className="bg-white/70 backdrop-blur-md p-5 rounded-2xl shadow-md">
-          <h2 className="text-xl font-semibold text-gray-700 mb-3">📝 Recent Feedbacks</h2>
-          <ul className="space-y-4">
-            {feedbacks.map(fb => (
-              <li key={fb.id} className="border border-gray-200 p-4 rounded-xl bg-white hover:shadow transition">
-                <div className="flex justify-between items-center">
-                  <div className="font-semibold text-gray-800">{fb.customer}</div>
-                  <div className="text-yellow-500 font-medium">⭐ {fb.rating}</div>
-                </div>
-                <div className="text-sm text-gray-600 mt-1">"{fb.comment}"</div>
-              </li>
-            ))}
-          </ul>
-        </div> */}
-
-            {/* <div className="text-center pt-4">
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700 transition px-5 py-2 rounded-full shadow-md">
-            📤 Export Data
-          </Button>
-        </div> */}
           </div>
         </div>
       </motion.div>

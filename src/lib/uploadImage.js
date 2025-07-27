@@ -1,7 +1,8 @@
 import { supabase } from "./supabase";
 
 export async function uploadImage(file, bucketName, pathInBucket = '') {
-    if (!file) return { error: 'No file provided' }
+    try {
+        if (!file) return { error: 'No file provided' }
 
     // Get file extension
     const fileExt = file.name.split('.').pop()
@@ -35,5 +36,8 @@ export async function uploadImage(file, bucketName, pathInBucket = '') {
         data,
         publicUrl: publicURLData?.publicUrl,
         path: filePath,
+    }
+    } catch (err) {
+        console.log("supa", err);
     }
 }
