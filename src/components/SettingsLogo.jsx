@@ -33,13 +33,14 @@ export default function ImageUploader({ shop, updateShop }) {
     }
 
     const handleDragLeave = () => setIsDragging(false)
+    console.log(shop.images_limit);
 
     const handleUdateLogo = async () => {
         if (file) {
             const url = await upload(file)
             updateShop({
                 match: { id: localStorage.getItem("shop_id") },
-                updates: { ...shop, logo: url }, // ⬅️ keeps other values unchanged
+                updates: { ...shop, logo: url, images_limit: shop.images_limit + 1 }, // ⬅️ keeps other values unchanged
             })
         }
     }

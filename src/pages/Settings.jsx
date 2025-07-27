@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useSwipeNavigate } from "../hooks/custom/useSwipeNavigate"
 import { useUpdate } from "../hooks/remote/useUpdate"
-import { useGetOne } from '../hooks/remote/useGetOne'
+import { useGet } from '../hooks/remote/useGet'
 import SettingsBasics from "../components/SettingsBasics"
 import SettingsLinks from "../components/SettingsLinks"
 import SettingsColor from "../components/SettingsColor"
 import SettingsLogo from "../components/SettingsLogo"
+import { shop_id } from "../constants/local"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
@@ -13,11 +14,14 @@ export default function Settings() {
         left: '/users',
     })
 
-    const { data: shop, isPending } = useGetOne('shops', 'shops')
+    const { data, isPending } = useGet('shops', {
+        filters: [{ column: 'id', operator: 'eq', value: shop_id }],
+    })
+
     const { mutate: updateShop } = useUpdate('shops', 'shops')
 
     if (isPending) return null // must view a special ui if the shop_id not found
-
+    const shop = data[0]
     return (
         <AnimatePresence mode="wait">
             <motion.div
