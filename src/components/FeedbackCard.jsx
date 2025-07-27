@@ -1,4 +1,4 @@
-import { CalendarDays, CheckCircle, MessageSquareText, Star, User, Trash2, Pin, Archive } from "lucide-react";
+import { CalendarDays, MessageSquareText, User, Trash2, Archive } from "lucide-react";
 import { useSwipeable } from "react-swipeable";
 import { useState } from "react";
 import { useDelete } from '../hooks/remote/useDelete'

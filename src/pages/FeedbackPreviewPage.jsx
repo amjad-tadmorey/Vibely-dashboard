@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toPng } from "html-to-image";
-import FeedbackCard from "../components/FeedbackCard";
 import Button from "../ui/Button";
 import CubesSpinner from '../ui/CubeSpinner'
-import { Share } from "lucide-react";
+import { CalendarDays, MessageSquareText, Share, User } from "lucide-react";
+import { getGradientFromColor } from "../lib/getGradientFromColor";
+import { useGet } from '../hooks/remote/useGet'
 
-export default function FeedbackPreviewPage() {
+export default function FeedbackPreviewPage({ color }) {
+
+
     const { state } = useLocation();
     const feedbacks = state?.feedbacks || [];
     const containerRef = useRef(null);
@@ -16,7 +19,9 @@ export default function FeedbackPreviewPage() {
     useEffect(() => {
         async function generatePNGs() {
             const nodes = Array.from(containerRef.current.children);
-            const imagePromises = nodes.map((node) => toPng(node));
+            const imagePromises = nodes.map((node) =>
+                toPng(node, { backgroundColor: "white", quality: 1 })
+            );
             const dataUrls = await Promise.all(imagePromises);
             setImages(dataUrls);
             setGenerated(true);
@@ -57,6 +62,8 @@ export default function FeedbackPreviewPage() {
         }
     };
 
+    // if (isPending) return null
+    const gradientClass = getGradientFromColor(color);
 
     return (
         <div className="">
@@ -83,9 +90,47 @@ export default function FeedbackPreviewPage() {
             {/* Hidden DOM to capture cards as images */}
             {!generated && (
                 <div className="absolute -z-10 opacity-0 pointer-events-none" ref={containerRef}>
-                    {feedbacks.map((fb) => (
-                        <FeedbackCard key={fb.id} feedback={fb} isSelected={false} />
-                    ))}
+                    {feedbacks.map((fb) => {
+                        const { id, rate, content, created_at, customer_name } = fb;
+
+
+
+                        return <div
+                            key={fb.id}
+                            className={
+                                ` m-1 mb-2 shadow-md p-4 transition-all duration-300 ease-in-out relative z-10`
+                            }
+                            style={gradientClass}
+
+                        >
+                            {/* Rating */}
+                            <div className="flex items-center justify-between mb-2">
+                                <div className="flex gap-1">
+                                    {[1, 2, 3, 4, 5].map((i) => (
+                                        <span key={i} className={i <= rate ? "text-yellow-400" : "text-gray-300"}>
+                                            ★
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="flex items-center gap-1 text-sm text-gray-600">
+                                    <User size={14} />
+                                    {customer_name}
+                                </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="text-gray-800 text-sm font-medium mb-3">
+                                <MessageSquareText size={16} className="inline mr-1 text-gray-500" />
+                                {content}
+                            </div>
+
+                            {/* Date */}
+                            <div className="text-xs text-gray-500 flex items-center gap-1">
+                                <CalendarDays size={14} />
+                                {new Date(created_at).toLocaleDateString()}
+                            </div>
+                        </div>
+                    })}
                 </div>
             )}
 
@@ -93,7 +138,7 @@ export default function FeedbackPreviewPage() {
             {generated && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {images.map((src, i) => (
-                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="rounded-xl shadow" />
+                        <img key={i} src={src} alt={`feedback-${i + 1}`} className="" />
                     ))}
                 </div>
             )}

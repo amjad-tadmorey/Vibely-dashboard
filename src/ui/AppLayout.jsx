@@ -5,7 +5,6 @@ import { shop_id } from "../constants/local";
 import { useEffect } from "react";
 
 export default function AppLayout() {
-
   useEffect(() => {
     if (shop_id === null) window.location.reload()
   })

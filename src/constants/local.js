@@ -1,6 +1,4 @@
 export const shop_id = localStorage.getItem('shop_id') || null
-
-
 export const platforms = [
     "facebook",
     "instagram",

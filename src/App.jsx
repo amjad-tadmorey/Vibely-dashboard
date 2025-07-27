@@ -12,11 +12,23 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
+import Users from "./pages/Users";
+import { useAuth } from "./context/AuthContext";
+import AccessDenied from "./pages/AccessDenied";
+import { shop_id } from "./constants/local";
+import { useGet } from "./hooks/remote/useGet";
+import QR from "./pages/QR";
 
 function App() {
-  const x = 1
+  const { user } = useAuth()
+  const role = user?.user_metadata?.role
+
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const { data: shop, isPending } = useGet('shops', {
+    filters: [{ column: 'id', operator: 'eq', value: shop_id }],
+  })
 
   useEffect(() => {
     const getSession = async () => {
@@ -35,7 +47,9 @@ function App() {
     return () => listener?.subscription.unsubscribe();
   }, []);
 
-  if (loading) return <Spinner />;
+  if (loading || isPending) return <Spinner />;
+
+  const color = shop[0].color
 
   return (
     <>
@@ -60,8 +74,10 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="feedback" element={<FeedbackPage />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="preview" element={<FeedbackPreviewPage />} />
+            <Route path="qr" element={<QR />} />
+            <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
+            <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
+            <Route path="preview" element={<FeedbackPreviewPage color={color} />} />
           </Route>
         </Routes>
       </BrowserRouter>
