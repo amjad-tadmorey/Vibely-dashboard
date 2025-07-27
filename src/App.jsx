@@ -17,6 +17,7 @@ import { useAuth } from "./context/AuthContext";
 import AccessDenied from "./pages/AccessDenied";
 import { shop_id } from "./constants/local";
 import { useGet } from "./hooks/remote/useGet";
+import QR from "./pages/QR";
 
 function App() {
   const { user } = useAuth()
@@ -73,6 +74,7 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="feedback" element={<FeedbackPage />} />
+            <Route path="qr" element={<QR />} />
             <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
             <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
             <Route path="preview" element={<FeedbackPreviewPage color={color} />} />
