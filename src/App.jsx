@@ -17,6 +17,7 @@ import { useAuth } from "./context/AuthContext";
 import AccessDenied from "./pages/AccessDenied";
 import QR from "./pages/QR";
 import ErrorBoundary from "./components/ErrorBoundary";
+import TrialExpirey from "./ui/TrialExpiery";
 
 function App() {
   const { user } = useAuth()
@@ -65,7 +66,7 @@ function App() {
 
             <Route
               path="/"
-              element={session ? <AppLayout /> : <Navigate to="/login" replace />}
+              element={session ? <TrialExpirey /> : <Navigate to="/login" replace />}
             >
               <Route index element={<Dashboard />} />
               <Route path="feedback" element={<FeedbackPage />} />

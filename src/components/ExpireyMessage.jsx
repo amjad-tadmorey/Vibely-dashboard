@@ -2,10 +2,10 @@ import { Mail, Phone } from "lucide-react";
 import { FaWhatsapp } from 'react-icons/fa';
 
 
-function ExpireyMessage() {
+function ErrorMessage({ error }) {
   return (
     <div
-      className="flex flex-col h-screen items-center justify-center p-4 py-2 rounded-lg max-w-md mx-auto text-center"
+      className="flex flex-col items-center justify-center p-4 py-2 rounded-lg max-w-md mx-auto text-center"
       style={{ backgroundColor: '#d6e9fb', color: '#333', boxShadow: '0 4px 12px rgba(110, 193, 246, 0.3)' }}
     >
       {/* Image at the top */}
@@ -16,12 +16,12 @@ function ExpireyMessage() {
         style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
       />
 
-      <h2 className="text-2xl font-semibold mb-4">Your free trial has expired..</h2>
+      <h2 className="text-2xl font-semibold mb-4">Oops! Something went wrong.</h2>
       <p className="mb-6">
-        Upgrade now to restore access and keep your progress.
+        We’re having trouble loading the data right now. Please try again later.
       </p>
       <p className="mb-4">
-        contact our support team:
+        If the problem persists, contact our support team:
       </p>
 
       <div className="flex gap-4">
@@ -51,4 +51,4 @@ function ExpireyMessage() {
   );
 }
 
-export default ExpireyMessage;
+export default ErrorMessage;

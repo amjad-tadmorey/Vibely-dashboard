@@ -57,7 +57,8 @@ export default function Dashboard() {
           <ProgressBar progress={feedbacks.length} limit={FEEDBACK_LIMIT} title="Feedbacks" />
           <ProgressBar progress={shop.images} limit={IMAGES_LIMIT} title="Images" />
           <ProgressBar progress={shop.users} limit={USERS_LIMIT} title="Users" />
-          <ProgressBar progress={daysPassed} limit={FREE_TRIAL_LIMIT} title="Free trial" />
+          {shop.status === 'free' && <ProgressBar progress={daysPassed} limit={FREE_TRIAL_LIMIT} title="Free trial" />}
+
         </div>
       </motion.div>
     </AnimatePresence>
