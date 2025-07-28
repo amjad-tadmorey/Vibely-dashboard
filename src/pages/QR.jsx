@@ -54,27 +54,38 @@ export default function QR() {
         }
     }
 
-    const handleDownload = async () => {
-        if (!ref.current) return
-        const dataUrl = await toPng(ref.current)
-        const link = document.createElement('a')
-        link.download = 'qr-download.png'
-        link.href = dataUrl
-        link.click()
-    }
+    const waitForImagesToLoad = (element) => {
+        const images = element.querySelectorAll('img');
+        const promises = Array.from(images).map(img => {
+            if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+            return new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve; // even on error, we resolve to prevent hanging
+            });
+        });
+        return Promise.all(promises);
+    };
 
+    const handleDownload = async () => {
+        if (!ref.current) return;
+
+        await waitForImagesToLoad(ref.current); // Wait for all images to load
+
+        const dataUrl = await toPng(ref.current);
+        const link = document.createElement('a');
+        link.download = 'qr-download.png';
+        link.href = dataUrl;
+        link.click();
+    };
 
     const handleShare = async () => {
         if (!ref.current) return;
 
         try {
-            // Convert HTML element to image
+            await waitForImagesToLoad(ref.current); // Wait before capturing
+
             const dataUrl = await toPng(ref.current);
-
-            // Convert dataURL to Blob
             const blob = await (await fetch(dataUrl)).blob();
-
-            // Create File from Blob
             const file = new File([blob], 'qr-share.png', { type: blob.type });
 
             const canShareFiles = navigator.canShare?.({ files: [file] });
