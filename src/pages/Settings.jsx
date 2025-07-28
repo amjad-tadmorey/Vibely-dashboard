@@ -7,20 +7,24 @@ import SettingsLinks from "../components/SettingsLinks"
 import SettingsColor from "../components/SettingsColor"
 import SettingsLogo from "../components/SettingsLogo"
 import { shop_id } from "../constants/local"
+import Spinner from "../ui/Spinner"
+import ErrorMessage from "../components/ErrorMessage"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
-        right: '/feedback',
+        right: '/qr',
         left: '/users',
     })
 
-    const { data, isPending } = useGet('shops', {
+    const { data, isPending, error } = useGet('shops', {
         filters: [{ column: 'id', operator: 'eq', value: shop_id }],
     })
 
     const { mutate: updateShop } = useUpdate('shops', 'shops')
 
-    if (isPending) return null // must view a special ui if the shop_id not found
+
+    if(error) return <ErrorMessage />
+    if (isPending) return <Spinner />
     const shop = data[0]
     return (
         <AnimatePresence mode="wait">

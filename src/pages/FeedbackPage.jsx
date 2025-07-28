@@ -6,10 +6,11 @@ import FeedbackFilters from '../components/FeedbackFilters';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFeedbackNotification } from '../hooks/custom/useFeedbackNotification';
 import { useSwipeNavigate } from '../hooks/custom/useSwipeNavigate';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function FeedbackPage() {
   const handlers = useSwipeNavigate(
-    { right: '/', left: '/settings' },
+    { right: '/', left: '/qr' },
     'card'
   )
 
@@ -23,8 +24,11 @@ export default function FeedbackPage() {
   const [sortOrder, setSortOrder] = useState("desc");
   const [activeTab, setActiveTab] = useState("new");
 
-  const { data: feedbacks = [], isPending } = useGet('feedbacks', 'feedbacks');
+  const { data: feedbacks = [], isPending, error } = useGet('feedbacks', 'feedbacks');
 
+
+  if(error) return <ErrorMessage />
+      
   const filteredFeedbacks = feedbacks
     .filter(fb => fb.status === activeTab)
     .filter(fb => filterRate === 0 || fb.rate === filterRate)

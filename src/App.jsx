@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+//192.168.1.1
 import Login from "./components/Login";
 import Spinner from "./ui/Spinner"
 import FeedbackPage from "./pages/FeedbackPage";
@@ -16,6 +16,7 @@ import Users from "./pages/Users";
 import { useAuth } from "./context/AuthContext";
 import AccessDenied from "./pages/AccessDenied";
 import QR from "./pages/QR";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   const { user } = useAuth()
@@ -47,33 +48,36 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={!session ? <Login /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          />
-          <Route
-            path="/reset-password"
-            element={<ResetPassword />}
-          />
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path="/login"
+              element={!session ? <Login /> : <Navigate to="/" replace />}
+            />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword />}
+            />
+            <Route
+              path="/reset-password"
+              element={<ResetPassword />}
+            />
 
-          <Route
-            path="/"
-            element={session ? <AppLayout /> : <Navigate to="/login" replace />}
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="feedback" element={<FeedbackPage />} />
-            <Route path="qr" element={<QR />} />
-            <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
-            <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
-            <Route path="preview" element={<FeedbackPreviewPage />} />
-          </Route>
-        </Routes>
+            <Route
+              path="/"
+              element={session ? <AppLayout /> : <Navigate to="/login" replace />}
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="feedback" element={<FeedbackPage />} />
+              <Route path="qr" element={<QR />} />
+              <Route path="users" element={role === 'admin' ? <Users /> : <AccessDenied />} />
+              <Route path="settings" element={role === 'admin' ? <Settings /> : <AccessDenied />} />
+              <Route path="preview" element={<FeedbackPreviewPage />} />
+            </Route>
+          </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
+
 
       <Toaster
         gutter={12}
