@@ -4,10 +4,8 @@ import { toPng } from "html-to-image";
 import Button from "../ui/Button";
 import CubesSpinner from '../ui/CubeSpinner'
 import { CalendarDays, MessageSquareText, Share, User } from "lucide-react";
-import { getGradientFromColor } from "../lib/getGradientFromColor";
-import { useGet } from '../hooks/remote/useGet'
 
-export default function FeedbackPreviewPage({ color }) {
+export default function FeedbackPreviewPage() {
 
 
     const { state } = useLocation();
@@ -15,6 +13,7 @@ export default function FeedbackPreviewPage({ color }) {
     const containerRef = useRef(null);
     const [images, setImages] = useState([]);
     const [generated, setGenerated] = useState(false);
+
 
     useEffect(() => {
         async function generatePNGs() {
@@ -28,7 +27,7 @@ export default function FeedbackPreviewPage({ color }) {
         }
 
         if (feedbacks.length && !generated) {
-            setTimeout(generatePNGs, 300); // wait for DOM to render
+            setTimeout(generatePNGs, 400); // wait for DOM to render
         }
     }, [feedbacks, generated]);
 
@@ -61,9 +60,6 @@ export default function FeedbackPreviewPage({ color }) {
             console.error("Share failed", err);
         }
     };
-
-    // if (isPending) return null
-    const gradientClass = getGradientFromColor(color);
 
     return (
         <div className="">
@@ -100,8 +96,6 @@ export default function FeedbackPreviewPage({ color }) {
                             className={
                                 ` m-1 mb-2 shadow-md p-4 transition-all duration-300 ease-in-out relative z-10`
                             }
-                            style={gradientClass}
-
                         >
                             {/* Rating */}
                             <div className="flex items-center justify-between mb-2">
