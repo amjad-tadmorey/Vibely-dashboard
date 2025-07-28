@@ -30,8 +30,8 @@ export default function QR() {
         custom: { label: 'Custom', icon: <LucideRuler /> }
     };
     const [sizeOption, setSizeOption] = useState('medium');
-    const [width, setWidth] = useState(200)
-    const [height, setHeight] = useState(200)
+    const [width, setWidth] = useState(120)
+    const [height, setHeight] = useState(120)
     const [extraText, setExtraText] = useState('')
     const [showLogo, setShowLogo] = useState(false)
 
@@ -54,26 +54,31 @@ export default function QR() {
         }
     }
 
-    const waitForImagesToLoad = (element) => {
-        const images = element.querySelectorAll('img');
-        const promises = Array.from(images).map(img => {
-            if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
-            return new Promise((resolve) => {
-                img.onload = resolve;
-                img.onerror = resolve; // even on error, we resolve to prevent hanging
-            });
-        });
-        return Promise.all(promises);
+    const waitForImagesToLoadAndPaint = (element) => {
+        const images = Array.from(element.querySelectorAll("img"));
+
+        return Promise.all(
+            images.map((img) => {
+                return new Promise((resolve) => {
+                    const testImg = new Image();
+                    testImg.crossOrigin = "anonymous"; // Required for Supabase or any external URL
+                    testImg.src = img.src;
+
+                    testImg.onload = () => requestAnimationFrame(resolve);
+                    testImg.onerror = resolve; // Resolve anyway on error
+                });
+            })
+        );
     };
 
     const handleDownload = async () => {
         if (!ref.current) return;
 
-        await waitForImagesToLoad(ref.current); // Wait for all images to load
+        await waitForImagesToLoadAndPaint(ref.current); // ✅ wait for logo to fully render
 
         const dataUrl = await toPng(ref.current);
-        const link = document.createElement('a');
-        link.download = 'qr-download.png';
+        const link = document.createElement("a");
+        link.download = "qr-download.png";
         link.href = dataUrl;
         link.click();
     };
@@ -82,24 +87,24 @@ export default function QR() {
         if (!ref.current) return;
 
         try {
-            await waitForImagesToLoad(ref.current); // Wait before capturing
+            await waitForImagesToLoadAndPaint(ref.current); // ✅ wait before capturing
 
             const dataUrl = await toPng(ref.current);
             const blob = await (await fetch(dataUrl)).blob();
-            const file = new File([blob], 'qr-share.png', { type: blob.type });
+            const file = new File([blob], "qr-share.png", { type: blob.type });
 
             const canShareFiles = navigator.canShare?.({ files: [file] });
 
             if (navigator.share && canShareFiles) {
                 await navigator.share({
-                    title: 'QR Code',
-                    text: 'Check out this QR code!',
+                    title: "QR Code",
+                    text: "Check out this QR code!",
                     files: [file],
                 });
             } else if (navigator.share) {
                 await navigator.share({
-                    title: 'QR Code',
-                    text: 'Check out this QR code! ' + window.location.href,
+                    title: "QR Code",
+                    text: "Check it out! " + window.location.href,
                 });
             } else {
                 alert("Sharing is not supported on this device.");
@@ -207,6 +212,7 @@ export default function QR() {
                             <img
                                 src={shop.logo}
                                 alt="Shop Logo"
+                                crossOrigin="anonymous" // 🔥 Important for capturing!
                                 className="w-20 h-20 object-contain mt-2"
                             />
                         )}
