@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useGet } from "../hooks/remote/useGet";
-import { shop_id } from "../constants/local";
+import { shop_id, USERS_LIMIT } from "../constants/local";
 import Spinner from "../ui/Spinner";
 import { Mail, Phone, ShieldCheck, User } from "lucide-react";
 import { useSwipeNavigate } from "../hooks/custom/useSwipeNavigate";
@@ -16,9 +16,14 @@ export default function Users() {
     const { data: users, isPending, error } = useGet('profiles', {
         filters: [{ column: 'shop_id', operator: 'eq', value: shop_id }],
     })
+    const { data: shop, isPending: isPendingShop, error: errorShop } = useGet('shops', {
+        filters: [{ column: 'id', operator: 'eq', value: shop_id }],
+    })
 
-    if(error) return <ErrorMessage />
-    if (isPending) return <Spinner />
+    if (error || errorShop) return <ErrorMessage />
+    if (isPending || isPendingShop) return <Spinner />
+
+
     return (
         <AnimatePresence mode="wait">
             <motion.div
@@ -38,31 +43,39 @@ export default function Users() {
                             </li>
                         ))}
                     </ul>
-                <div className="text-center font-semibold mt-4">Please contact us if you want to create a user you have X users available</div>
 
-                 <div className="flex gap-4 w-full justify-center mt-4">
-                    <a
-                    href="tel:+201227139914"
-                    className="inline-flex items-center gap-2 px-1"
-                    >
-                    <Phone size={30} color="#6ec1f6" />
-                    </a>
-                    <a
-                    href="https://wa.me/201227139914"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-1"
-                    >
-                    <FaWhatsapp  size={30} color="#6ec1f6" />
-                    </a>
-                    <a
-                    href="mailto:amjadtadmory@gmail.com"
-                    className="inline-flex items-center gap-2 px-1"
-                    >
-                    <Mail size={30} color="#6ec1f6" />
-                    </a>
-                </div>
-                <h1 className="font-bold text-[#6ec1f6] text-xl mt-2 text-center">Support Contacts</h1>
+                    {
+                        USERS_LIMIT > shop[0].users &&
+                        <>
+                            <div className="text-center font-semibold mt-4">Please contact us if you want to create a user you have {USERS_LIMIT - shop[0].users} users available</div>
+
+                            <div className="flex gap-4 w-full justify-center mt-4">
+                                <a
+                                    href="tel:+201227139914"
+                                    className="inline-flex items-center gap-2 px-1"
+                                >
+                                    <Phone size={30} color="#6ec1f6" />
+                                </a>
+                                <a
+                                    href="https://wa.me/201227139914"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-1"
+                                >
+                                    <FaWhatsapp size={30} color="#6ec1f6" />
+                                </a>
+                                <a
+                                    href="mailto:amjadtadmory@gmail.com"
+                                    className="inline-flex items-center gap-2 px-1"
+                                >
+                                    <Mail size={30} color="#6ec1f6" />
+                                </a>
+                            </div>
+
+                            <h1 className="font-bold text-[#6ec1f6] text-xl mt-2 text-center">Support Contacts</h1>
+                        </>
+                    }
+
                 </div>
 
             </motion.div>
