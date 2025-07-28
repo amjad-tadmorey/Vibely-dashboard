@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supaUpdate } from '../../lib/supaQuery'
-import toast from 'react-hot-toast'
 
 
 export function useUpdate(table, invalidateKey = null) {
@@ -11,7 +10,6 @@ export function useUpdate(table, invalidateKey = null) {
         onSuccess: () => {
             if (invalidateKey) {
                 queryClient.invalidateQueries([invalidateKey])
-                toast.success('done')
             }
         },
     })

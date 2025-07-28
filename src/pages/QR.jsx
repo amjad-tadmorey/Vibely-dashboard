@@ -7,14 +7,14 @@ import Spinner from '../ui/Spinner'
 import { useSwipeNavigate } from "../hooks/custom/useSwipeNavigate"
 import Input from '../ui/Input'
 import { AnimatePresence, motion } from 'framer-motion'
-import { LucideRuler, Square } from 'lucide-react'
+import { Download, LucideRuler, Share, Share2, Square } from 'lucide-react'
 import Button from '../ui/Button'
 import ErrorMessage from '../components/ErrorMessage'
 
 export default function QR() {
-        const handlers = useSwipeNavigate({
-            right: '/feedback',
-            left: '/settings',
+    const handlers = useSwipeNavigate({
+        right: '/feedback',
+        left: '/settings',
     })
 
     const url = `https://vibely-gamma-peach.vercel.app/?shop_id=${shop_id}`
@@ -23,10 +23,10 @@ export default function QR() {
     })
 
     const [qrSrc, setQrSrc] = useState(null)
-      const presetSizes = {
-        small: { label: '60 x 60', width: 60, height: 60, icon: <Square size={15}/> },
-        medium: { label: '120 x 120', width: 120, height: 120, icon: <Square size={20}/> },
-        large: { label: '200 x 200', width: 200, height: 200, icon: <Square size={25}/> },
+    const presetSizes = {
+        small: { label: '60 x 60', width: 60, height: 60, icon: <Square size={15} /> },
+        medium: { label: '120 x 120', width: 120, height: 120, icon: <Square size={20} /> },
+        large: { label: '200 x 200', width: 200, height: 200, icon: <Square size={25} /> },
         custom: { label: 'Custom', icon: <LucideRuler /> }
     };
     const [sizeOption, setSizeOption] = useState('medium');
@@ -44,13 +44,13 @@ export default function QR() {
         })
     }, [url])
 
-    
+
     const handleSizeChange = (option) => {
         setSizeOption(option);
         if (option !== 'custom') {
-        const { width, height } = presetSizes[option];
-        setWidth(width);
-        setHeight(height);
+            const { width, height } = presetSizes[option];
+            setWidth(width);
+            setHeight(height);
         }
     }
 
@@ -63,60 +63,95 @@ export default function QR() {
         link.click()
     }
 
+
+    const handleShare = async () => {
+        if (!ref.current) return;
+
+        try {
+            // Convert HTML element to image
+            const dataUrl = await toPng(ref.current);
+
+            // Convert dataURL to Blob
+            const blob = await (await fetch(dataUrl)).blob();
+
+            // Create File from Blob
+            const file = new File([blob], 'qr-share.png', { type: blob.type });
+
+            const canShareFiles = navigator.canShare?.({ files: [file] });
+
+            if (navigator.share && canShareFiles) {
+                await navigator.share({
+                    title: 'QR Code',
+                    text: 'Check out this QR code!',
+                    files: [file],
+                });
+            } else if (navigator.share) {
+                await navigator.share({
+                    title: 'QR Code',
+                    text: 'Check out this QR code! ' + window.location.href,
+                });
+            } else {
+                alert("Sharing is not supported on this device.");
+            }
+        } catch (err) {
+            console.error("Share failed", err);
+            alert("Something went wrong while sharing.");
+        }
+    };
+
     if (isPending) return <Spinner />
-    if(error) return <ErrorMessage />
+    if (error) return <ErrorMessage />
     const shop = data[0]
 
     return (
-            <AnimatePresence mode="wait">
-                <motion.div
-                    initial={{ x: 100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: -100, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="w-full"
-                >
+        <AnimatePresence mode="wait">
+            <motion.div
+                initial={{ x: 100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="w-full"
+            >
                 <div {...handlers} className="flex flex-col items-center gap-6 p-6 transition-all">
                     <div className="flex flex-wrap gap-4 justify-center">
                         <div className="flex flex-col gap-4">
                             <div className="flex gap-1 flex-wrap">
                                 {Object.entries(presetSizes).map(([key, { label, icon }]) => (
-                                <button
-                                    key={key}
-                                    onClick={() => handleSizeChange(key)}
-                                    className={`transition-all rounded-lg flex flex-col items-center justify-between p-1 ${
-                                    sizeOption === key ? 'bg-[#6EC1F6] text-white' : 'bg-white text-gray-700'
-                                    } hover:border-[#6EC1F6]`}
-                                >
-                                    <span>{icon}</span>
-                                    <span>{label}</span>
-                                </button>
+                                    <button
+                                        key={key}
+                                        onClick={() => handleSizeChange(key)}
+                                        className={`transition-all rounded-lg flex flex-col items-center justify-between p-1 ${sizeOption === key ? 'bg-[#6EC1F6] text-white' : 'bg-white text-gray-700'
+                                            } hover:border-[#6EC1F6]`}
+                                    >
+                                        <span>{icon}</span>
+                                        <span>{label}</span>
+                                    </button>
                                 ))}
                             </div>
 
                             {sizeOption === 'custom' && (
                                 <div className="flex items-center gap-4">
-                                <label className="flex flex-col text-sm">
-                                    Width:
-                                    <Input
-                                    type="number"
-                                    value={width}
-                                    onChange={(e) => setWidth(Number(e.target.value))}
-                                    className="border p-1 rounded w-24"
-                                    />
-                                </label>
-                                <label className="flex flex-col text-sm">
-                                    Height:
-                                    <Input
-                                    type="number"
-                                    value={height}
-                                    onChange={(e) => setHeight(Number(e.target.value))}
-                                    className="border p-1 rounded w-24"
-                                    />
-                                </label>
+                                    <label className="flex flex-col text-sm">
+                                        Width:
+                                        <Input
+                                            type="number"
+                                            value={width}
+                                            onChange={(e) => setWidth(Number(e.target.value))}
+                                            className="border p-1 rounded w-24"
+                                        />
+                                    </label>
+                                    <label className="flex flex-col text-sm">
+                                        Height:
+                                        <Input
+                                            type="number"
+                                            value={height}
+                                            onChange={(e) => setHeight(Number(e.target.value))}
+                                            className="border p-1 rounded w-24"
+                                        />
+                                    </label>
                                 </div>
                             )}
-                            </div>
+                        </div>
                         <div className='flex items-center gap-4'>
                             <label className="flex flex-col text-sm">
                                 Extra Text:
@@ -168,11 +203,18 @@ export default function QR() {
                         {extraText && <p className="text-2xl mt-2 font-semibold text-center" style={{ color: shop.color }}>{extraText}</p>}
                     </div>
 
-                    <Button
-                        onClick={handleDownload}
-                    >
-                        Download Image
-                    </Button>
+                    <div className='flex items-center gap-4'>
+                        <Button
+                            onClick={handleDownload}
+                        >
+                            <Download />
+                        </Button>
+                        <Button
+                            onClick={handleShare}
+                        >
+                            <Share2 />
+                        </Button>
+                    </div>
                 </div>
             </motion.div>
         </AnimatePresence>
