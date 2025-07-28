@@ -111,7 +111,6 @@ export default function QR() {
             }
         } catch (err) {
             console.error("Share failed", err);
-            alert("Something went wrong while sharing.");
         }
     };
 
