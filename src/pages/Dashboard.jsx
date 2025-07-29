@@ -25,7 +25,7 @@ export default function Dashboard() {
   const rateAverage = (feedbacks.reduce((sum, f) => sum + f.rate, 0) / feedbacks.length).toFixed(2);
 
 
-  const alerts = feedbacks.filter(fb => fb.rate <= 2)
+  const alerts = feedbacks.filter(fb => fb.rate <= 2 && fb.status === 'new')
 
   const shop = data[0]
   const daysPassed = Math.floor((new Date() - new Date(shop.created_at)) / (1000 * 60 * 60 * 24));
