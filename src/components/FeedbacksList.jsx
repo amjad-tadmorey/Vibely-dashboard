@@ -7,7 +7,7 @@ import NoData from '../ui/NoData';
 import { useDelete } from '../hooks/remote/useDelete';
 import { useUpdate } from '../hooks/remote/useUpdate';
 
-export default function FeedbacksList({ feedbacks }) {
+export default function FeedbacksList({ feedbacks, activeTab }) {
     const [selected, setSelected] = useState([]);
     const navigate = useNavigate();
 
@@ -73,12 +73,14 @@ export default function FeedbacksList({ feedbacks }) {
                             >
                                 <Trash2 />
                             </Button>
-                            <Button
-                                onClick={handleMarkMultipleAsHandled}
-                                size='sm'
-                            >
-                                <Archive />
-                            </Button>
+                            {
+                                activeTab === 'new' && <Button
+                                    onClick={handleMarkMultipleAsHandled}
+                                    size='sm'
+                                >
+                                    <Archive />
+                                </Button>
+                            }
                         </>
                     )}
                     <Button

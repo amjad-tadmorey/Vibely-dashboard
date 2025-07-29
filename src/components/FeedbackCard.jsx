@@ -6,7 +6,8 @@ import { useUpdate } from "../hooks/remote/useUpdate";
 import { AnimatePresence, motion } from 'framer-motion'
 
 const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
-    const { id, rate, content, created_at, customer_name } = feedback;
+    const { id, rate, content, created_at, customer_name, status } = feedback;
+
     const [isSwiped, setIsSwiped] = useState(false);
     const [isDisappearing, setIsDisappearing] = useState(false)
 
@@ -61,11 +62,13 @@ const FeedbackCard = ({ feedback, isSelected, onSelect, onMarkHandled }) => {
                         >
                             <Trash2 />
                         </button>
-                        <button className="text-blue-600 hover:text-blue-800 transition" title="Pin"
-                            onClick={handleMarkAsHandled}
-                        >
-                            <Archive />
-                        </button>
+                        {
+                            status === 'new' && <button className="text-blue-600 hover:text-blue-800 transition" title="Pin"
+                                onClick={handleMarkAsHandled}
+                            >
+                                <Archive />
+                            </button>
+                        }
                     </div>
 
                     {/* Main Card */}

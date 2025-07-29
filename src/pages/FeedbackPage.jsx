@@ -27,8 +27,8 @@ export default function FeedbackPage() {
   const { data: feedbacks = [], isPending, error } = useGet('feedbacks', 'feedbacks');
 
 
-  if(error) return <ErrorMessage />
-      
+  if (error) return <ErrorMessage />
+
   const filteredFeedbacks = feedbacks
     .filter(fb => fb.status === activeTab)
     .filter(fb => filterRate === 0 || fb.rate === filterRate)
@@ -78,7 +78,7 @@ export default function FeedbackPage() {
               transition={{ duration: 0.15 }}
               className="w-full"
             >
-              <FeedbacksList feedbacks={filteredFeedbacks} />
+              <FeedbacksList activeTab={activeTab} feedbacks={filteredFeedbacks} />
             </motion.div>
           </AnimatePresence>
         </div>
