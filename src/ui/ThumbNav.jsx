@@ -36,6 +36,7 @@ export default function ThumbNav() {
                             }`}
                     >
                         {item.icon}
+                        <span className="text-[.68rem]">{item.name}</span>
                         {item.name === 'Feedback' && newCount > 0 && (
                             <span className="absolute -top-2 -right-3 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-white bg-red-600 rounded-full shadow-md">
                                 {newCount}
