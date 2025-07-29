@@ -9,6 +9,7 @@ import SettingsLogo from "../components/SettingsLogo"
 import { shop_id } from "../constants/local"
 import Spinner from "../ui/Spinner"
 import ErrorMessage from "../components/ErrorMessage"
+import GoogleIdSettings from "../components/GoodleIdSettings"
 
 export default function Settings() {
     const handlers = useSwipeNavigate({
@@ -23,7 +24,7 @@ export default function Settings() {
     const { mutate: updateShop } = useUpdate('shops', 'shops')
 
 
-    if(error) return <ErrorMessage />
+    if (error) return <ErrorMessage />
     if (isPending) return <Spinner />
     const shop = data[0]
     return (
@@ -39,6 +40,9 @@ export default function Settings() {
                     <h2 className="text-xl font-bold mb-4">Shop customization</h2>
 
                     <SettingsBasics shop={shop} updateShop={updateShop} />
+                    <hr className="border-gray-200" />
+
+                    <GoogleIdSettings shop={shop} updateShop={updateShop} />
                     <hr className="border-gray-200" />
 
                     <SettingsLinks shop={shop} updateShop={updateShop} />

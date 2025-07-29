@@ -19,7 +19,7 @@ export const platforms = [
 ];
 
 
-export const FEEDBACK_LIMIT = 10000
+export const FEEDBACK_LIMIT = 5800
 export const IMAGES_LIMIT = 15
 export const FREE_TRIAL_LIMIT = 7
 export const USERS_LIMIT = 5
